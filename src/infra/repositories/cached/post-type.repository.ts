@@ -65,8 +65,25 @@ export class PostTypeRepository implements IPostTypeRepository {
 		return targetPostType;
 	}
 
-	update(postType: PostType): Promise<void> {
-		return this.repository.update(postType);
+	async update(postType: PostType): Promise<void> {
+		await redis.del(`post@post-type::$${postType.id}`);
+		await redis.del(`post@post-type::${postType.slug}`);
+
+		await this.repository.update(postType);
+
+		await redis.set(
+			`post@post-type::${postType.slug}`,
+			JSON.stringify(postType.unpack()),
+			"EX",
+			this.postTypeCacheExpirationTime,
+		);
+
+		await redis.set(
+			`post@post-type::$${postType.id}`,
+			JSON.stringify(postType.unpack()),
+			"EX",
+			this.postTypeCacheExpirationTime,
+		);
 	}
 
 	async getHighlights(): Promise<IUnmountedPostType[]> {
@@ -88,8 +105,11 @@ export class PostTypeRepository implements IPostTypeRepository {
 		return postTypeHighlights;
 	}
 
-	delete(postType: PostType): Promise<void> {
-		return this.repository.delete(postType);
+	async delete(postType: PostType): Promise<void> {
+		await redis.del(`post@post-type::$${postType.id}`);
+		await redis.del(`post@post-type::${postType.slug}`);
+
+		await this.repository.delete(postType);
 	}
 
 	length(): Promise<number> {
