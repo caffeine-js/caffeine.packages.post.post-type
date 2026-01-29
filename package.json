@@ -38,6 +38,7 @@
     "setup": "bun run build && bun link"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.2.0",
     "@types/bun": "latest",
     "@vitest/coverage-v8": "^4.0.18",
     "tsup": "^8.5.1",
@@ -49,6 +50,8 @@
   },
   "dependencies": {
     "@caffeine/models": "link:@caffeine/models",
-    "@caffeine/errors": "link:@caffeine/errors"
+    "@caffeine/errors": "link:@caffeine/errors",
+    "@caffeine/prisma-drive": "link:@caffeine/prisma-drive",
+    "@caffeine/redis-drive": "link:@caffeine/redis-drive"
   }
 }
