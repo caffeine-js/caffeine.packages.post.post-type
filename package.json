@@ -49,10 +49,11 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@caffeine/models": "link:@caffeine/models",
-    "@caffeine/errors": "link:@caffeine/errors",
-    "@caffeine/prisma-drive": "link:@caffeine/prisma-drive",
     "@caffeine/constants": "link:@caffeine/constants",
-    "@caffeine/redis-drive": "link:@caffeine/redis-drive"
+    "@caffeine/errors": "link:@caffeine/errors",
+    "@caffeine/models": "link:@caffeine/models",
+    "@caffeine/prisma-drive": "link:@caffeine/prisma-drive",
+    "@caffeine/redis-drive": "link:@caffeine/redis-drive",
+    "elysia": "^1.4.22"
   }
 }

@@ -16,7 +16,7 @@ export class PostType extends Entity<IUnmountedPostType> implements IPostType {
 		{ name, isHighlighted, schema, slug }: IPostType,
 		entityData: EntityDTO,
 	) {
-		super(Entity.prepare(entityData));
+		super(entityData);
 
 		this.name = name;
 		this.schema = schema;
