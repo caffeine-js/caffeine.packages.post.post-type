@@ -54,6 +54,7 @@
     "@caffeine/models": "link:@caffeine/models",
     "@caffeine/prisma-drive": "link:@caffeine/prisma-drive",
     "@caffeine/redis-drive": "link:@caffeine/redis-drive",
+    "@caffeine/auth": "link:@caffeine/auth",
     "elysia": "^1.4.22"
   }
 }

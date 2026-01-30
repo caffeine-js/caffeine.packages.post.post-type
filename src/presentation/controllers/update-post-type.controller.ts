@@ -1,9 +1,11 @@
 import { UpdatePostTypeDTO } from "@/application/dtos/update-post-type.dto";
 import { makeUpdatePostTypeBySlugUseCase } from "@/infra/factories/application/update-post-type-by-slug.use-case.factory";
+import { AuthGuard } from "@caffeine/auth/plugins/guards";
 import { SlugObjectDTO } from "@caffeine/models/dtos";
 import Elysia from "elysia";
 
 export const UpdatePostTypeController = new Elysia()
+	.use(AuthGuard({ layerName: "post@post-type" }))
 	.decorate("service", makeUpdatePostTypeBySlugUseCase())
 	.patch(
 		"/:slug",
