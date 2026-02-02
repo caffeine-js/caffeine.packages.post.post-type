@@ -8,7 +8,7 @@ export const UpdatePostTypeController = new Elysia()
 	.use(AuthGuard({ layerName: "post@post-type" }))
 	.decorate("service", makeUpdatePostTypeBySlugUseCase())
 	.patch(
-		"/:slug",
+		"/by-slug/:slug",
 		({ params: { slug }, body, service }) => {
 			return service.run(slug, body);
 		},

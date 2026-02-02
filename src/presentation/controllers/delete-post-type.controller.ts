@@ -7,7 +7,7 @@ export const DeletePostTypeController = new Elysia()
 	.use(AuthGuard({ layerName: "post@post-type" }))
 	.decorate("service", makeDeletePostTypeBySlugUseCase())
 	.delete(
-		"/:slug",
+		"/by-slug/:slug",
 		({ params: { slug }, service }) => {
 			return service.run(slug);
 		},

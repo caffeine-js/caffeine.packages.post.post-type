@@ -43,8 +43,8 @@ Todas as rotas estão sob o prefixo `/post-type`.
 | `GET` | `/?page=n` | `GetPostTypeByPageController` | ❌ | Lista paginada |
 | `GET` | `/highlights` | `GetPostTypeHighlightsController` | ❌ | Lista destaques |
 | `GET` | `/number-of-pages` | `GetPostTypeNumberOfPagesController` | ❌ | Total de páginas |
-| `PATCH` | `/:slug` | `UpdatePostTypeController` | ✅ Requerida | Atualiza PostType |
-| `DELETE` | `/:slug` | `DeletePostTypeController` | ✅ Requerida | Remove PostType |
+| `PATCH` | `/by-slug/:slug` | `UpdatePostTypeController` | ✅ Requerida | Atualiza PostType |
+| `DELETE` | `/by-slug/:slug` | `DeletePostTypeController` | ✅ Requerida | Remove PostType |
 
 ---
 
@@ -147,7 +147,7 @@ GET /post-type/number-of-pages
 
 ### `UpdatePostTypeController`
 ```typescript
-PATCH /post-type/:slug
+PATCH /post-type/by-slug/:slug
 Content-Type: application/json
 Authorization: Bearer <token>
 
@@ -163,7 +163,7 @@ Authorization: Bearer <token>
 
 ### `DeletePostTypeController`
 ```typescript
-DELETE /post-type/:slug
+DELETE /post-type/by-slug/:slug
 Authorization: Bearer <token>
 ```
 
