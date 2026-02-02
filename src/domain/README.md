@@ -7,14 +7,22 @@
 O `PostType` é uma entidade que define a estrutura de diferentes tipos de conteúdo no sistema. Assim como todo domínio, ele estende de `Entity`.
 
 ```
-#################################################################
-# PostType -> Informa o esquema de cada PostContent             #
-#                                                               # 
-# Post -> Informa uma postagem em sua forma mais simples        #
-#                                                               #
-# PostContent -> Informa o conteúdo de cada Post e o            #
-#                conteúdo das informações adicionais            #
-#################################################################
+┌───────────────────────────────────────────────────────────────┐
+│    PostType -> Informa o esquema de cada PostContent          │
+│                                                               │ 
+│        Post -> Informa uma postagem em sua forma mais simples │
+│                                                               │
+│ PostContent -> Informa o conteúdo de cada Post e o conteúdo   │
+│                das informações adicionais                     │
+│                                                               │
+│     PostTag -> Informa as Tags que serão associadas aos Posts │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+
+┌────────────────┐    ┌─────────────────┐    ┌────────────────┐    ┌──────────────┐
+│  Presentation  │ ─▶ │   Application   │ ─▶ │    Domain      │ ◀─ │    Infra     │
+│  (Controllers) │    │   (Use Cases)   │    │   (Entities)   │    │ (Repositories)
+└────────────────┘    └─────────────────┘    └────────────────┘    └──────────────┘
 ```
 
 ---
