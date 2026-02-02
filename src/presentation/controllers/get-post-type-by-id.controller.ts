@@ -1,13 +1,6 @@
 import { makeFindPostTypeByIdUseCase } from "@/infra/factories/application/find-post-type-by-id.use-case.factory";
-import { t } from "@caffeine/models";
+import { IdObjectDTO } from "@caffeine/models/dtos";
 import Elysia from "elysia";
-
-const IdObjectDTO = t.Object({
-	id: t.String({
-		format: "uuid",
-		description: "Post Type's unique identifier",
-	}),
-});
 
 export const GetPostTypeByIdController = new Elysia()
 	.decorate("service", makeFindPostTypeByIdUseCase())
