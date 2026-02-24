@@ -1,115 +1,121 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { UpdatePostTypeBySlugUseCase } from "./update-post-type-by-slug.use-case";
 import { PostTypeRepository } from "@/infra/repositories/test/post-type-repository";
+import { FindPostTypeUseCase } from "./find-post-type.use-case";
+import { PostType } from "@/domain";
 import {
-	ResourceNotFoundException,
+	InvalidOperationException,
 	ResourceAlreadyExistsException,
 } from "@caffeine/errors/application";
-import { PostType } from "@/domain/post-type";
-import { PostTypeSchemaFactory } from "@/domain/factories/post-type-schema.factory";
+import { Schema } from "@caffeine/schema";
 import { t } from "@caffeine/models";
+import { SlugUniquenessCheckerService } from "@caffeine/domain/services";
+import type { IPostTypeUniquenessCheckerService } from "@/domain/types/services";
+import { FindEntityByTypeUseCase } from "@caffeine/application/use-cases";
+import type { UnpackedPostTypeDTO } from "@/domain/dtos";
+import type { IPostType, IPostTypeReader } from "@/domain/types";
 
 describe("UpdatePostTypeBySlugUseCase", () => {
-	let useCase: UpdatePostTypeBySlugUseCase;
 	let repository: PostTypeRepository;
-	let schemaStr: string;
+	let uniquenessChecker: IPostTypeUniquenessCheckerService;
+	let findEntityByType: FindEntityByTypeUseCase<
+		typeof UnpackedPostTypeDTO,
+		IPostType,
+		IPostTypeReader
+	>;
+	let findPostTypeUseCase: FindPostTypeUseCase;
+	let sut: UpdatePostTypeBySlugUseCase;
+
+	const validSchemaString = Schema.make(
+		t.Object({ content: t.String() }),
+	).toString();
 
 	beforeEach(() => {
 		repository = new PostTypeRepository();
-		useCase = new UpdatePostTypeBySlugUseCase(repository);
-		schemaStr = JSON.stringify(t.Object({ content: t.String() }));
+		uniquenessChecker = new SlugUniquenessCheckerService(repository);
+		findEntityByType = new FindEntityByTypeUseCase(repository);
+		findPostTypeUseCase = new FindPostTypeUseCase(findEntityByType);
+
+		sut = new UpdatePostTypeBySlugUseCase(
+			repository,
+			findPostTypeUseCase,
+			uniquenessChecker,
+		);
 	});
 
-	it("should update post type name and slug", async () => {
-		const slug = "old-name";
-		const pt = PostType.make(
-			{ name: "Old Name", slug, isHighlighted: false },
-			PostTypeSchemaFactory.make(schemaStr),
-		);
-		await repository.create(pt);
+	const makePostType = (name: string = "Original Name") => {
+		return PostType.make({
+			name,
+			schema: validSchemaString,
+		});
+	};
 
-		const input = { name: "New Name" };
+	it("should update name and highlight status", async () => {
+		const postType = makePostType();
+		await repository.create(postType);
 
-		const result = await useCase.run(slug, input);
+		const result = await sut.run(postType.slug, {
+			name: "New Name",
+			isHighlighted: true,
+		});
 
 		expect(result.name).toBe("New Name");
-		expect(result.slug).toBe("new-name");
-
-		const updatedInRepo = await repository.findBySlug("new-name");
-		expect(updatedInRepo).toBeDefined();
-		const oldInRepo = await repository.findBySlug(slug);
-		expect(oldInRepo).toBeNull();
-	});
-
-	it("should update isHighlighted status", async () => {
-		const slug = "test-item";
-		const pt = PostType.make(
-			{ name: "Test Item", slug, isHighlighted: false },
-			PostTypeSchemaFactory.make(schemaStr),
-		);
-		await repository.create(pt);
-
-		const input = { isHighlighted: true };
-
-		const result = await useCase.run(slug, input);
-
 		expect(result.isHighlighted).toBe(true);
-
-		const updatedInRepo = await repository.findBySlug(slug);
-		expect(updatedInRepo?.isHighlighted).toBe(true);
+		expect(repository.items).toContain(result);
 	});
 
-	it("should throw ResourceNotFoundException if post type not found", async () => {
-		const slug = "non-existent";
-		const input = { name: "New Name" };
+	it("should update slug when updateSlug is true", async () => {
+		const postType = makePostType("Old Name");
+		await repository.create(postType);
 
-		await expect(useCase.run(slug, input)).rejects.toThrow(
-			ResourceNotFoundException,
-		);
+		await sut.run("old-name", { name: "New Name" }, true);
+
+		expect(postType.slug).toBe("new-name");
+		expect(repository.items[0]?.slug).toBe("new-name");
 	});
 
-	it("should throw ResourceAlreadyExistsException if new name causes slug collision", async () => {
-		const slug1 = "item-one";
-		const pt1 = PostType.make(
-			{ name: "Item One", slug: slug1, isHighlighted: false },
-			PostTypeSchemaFactory.make(schemaStr),
-		);
-		await repository.create(pt1);
+	it("should update with explicit slug", async () => {
+		const postType = makePostType();
+		await repository.create(postType);
 
-		const slug2 = "item-two";
-		const pt2 = PostType.make(
-			{ name: "Item Two", slug: slug2, isHighlighted: false },
-			PostTypeSchemaFactory.make(schemaStr),
-		);
-		await repository.create(pt2);
+		await sut.run(postType.slug, { slug: "new-custom-slug" });
 
-		// Try to rename item-two to "Item One" (collides with item-one)
-		const input = { name: "Item One" };
+		expect(postType.slug).toBe("new-custom-slug");
+		expect(repository.items[0]?.slug).toBe("new-custom-slug");
+	});
 
-		await expect(useCase.run(slug2, input)).rejects.toThrow(
-			ResourceAlreadyExistsException,
+	it("should throw InvalidOperationException if no data provided", async () => {
+		await expect(sut.run("any-slug", {})).rejects.toThrow(
+			InvalidOperationException,
 		);
 	});
 
-	it("should not update properties if input dto is empty", async () => {
-		const slug = "no-update";
-		const pt = PostType.make(
-			{ name: "No Update", slug, isHighlighted: false },
-			PostTypeSchemaFactory.make(schemaStr),
-		);
-		await repository.create(pt);
+	it("should throw InvalidOperationException if name, updateSlug and slug are all provided", async () => {
+		await expect(
+			sut.run("any-slug", { name: "New Name", slug: "new-slug" }, true),
+		).rejects.toThrow(InvalidOperationException);
+	});
 
-		const input = {}; // Empty input
-		const result = await useCase.run(slug, input);
+	it("should throw ResourceAlreadyExistsException if new slug is not unique", async () => {
+		const firstPostType = makePostType();
+		firstPostType.reslug("testing");
+		await repository.create(firstPostType);
 
-		expect(result.name).toBe("No Update");
-		expect(result.slug).toBe("no-update");
-		expect(result.isHighlighted).toBe(false);
+		const secondPostType = makePostType();
+		await repository.create(secondPostType);
 
-		// Typically updatedAt should NOT change if no props provided,
-		// but checking implementation specifically for: if (name || isHighlighted) -> update updatedAt
-		// If input is empty, name undefined, isHighlighted undefined.
-		// So updatedAt should be same as original creation (assuming we can track it, but here it's fast).
-		// We verify at least it didn't crash and logic flowed.
+		await expect(
+			sut.run(secondPostType.id, { slug: "testing" }),
+		).rejects.toThrow(ResourceAlreadyExistsException);
+	});
+
+	it("should return early if new slug is same as current slug", async () => {
+		const postType = makePostType();
+		await repository.create(postType);
+		const uniquenessSpy = vi.spyOn(uniquenessChecker, "run");
+
+		await sut.run(postType.slug, { slug: postType.slug });
+
+		expect(uniquenessSpy).not.toHaveBeenCalled();
 	});
 });

@@ -10,6 +10,7 @@ export interface IPostTypeReader
 		ICanReadSlug<UnpackedPostTypeSchema, IPostType> {
 	findMany(page: number): Promise<IPostType[]>;
 	findManyByIds(ids: string[]): Promise<IPostType[]>;
-	findHighlights(): Promise<IPostType[]>;
+	findHighlights(page: number): Promise<IPostType[]>;
 	count(): Promise<number>;
+	countHighlights(): Promise<number>;
 }

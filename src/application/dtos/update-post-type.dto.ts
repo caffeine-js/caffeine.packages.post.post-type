@@ -4,8 +4,17 @@ export const UpdatePostTypeDTO = t.Object(
 	{
 		name: t.Optional(
 			t.String({
-				description: "The new name for the post type.",
+				description:
+					"The unique name of the post type (e.g., 'review', 'blog-post').",
 				examples: ["review"],
+				minLength: 1,
+			}),
+		),
+		slug: t.Optional(
+			t.String({
+				description:
+					"The unique slug identifier for the post type (e.g., 'my-adventures').",
+				examples: ["my-adventures"],
 				minLength: 1,
 			}),
 		),

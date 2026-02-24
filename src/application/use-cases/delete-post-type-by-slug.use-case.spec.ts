@@ -1,38 +1,45 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DeletePostTypeBySlugUseCase } from "./delete-post-type-by-slug.use-case";
 import { PostTypeRepository } from "@/infra/repositories/test/post-type-repository";
+import { FindPostTypeUseCase } from "./find-post-type.use-case";
+import { PostType } from "@/domain";
 import { ResourceNotFoundException } from "@caffeine/errors/application";
-import { PostType } from "@/domain/post-type";
-import { PostTypeSchemaFactory } from "@/domain/factories/post-type-schema.factory";
+import { Schema } from "@caffeine/schema";
 import { t } from "@caffeine/models";
 
 describe("DeletePostTypeBySlugUseCase", () => {
-	let useCase: DeletePostTypeBySlugUseCase;
 	let repository: PostTypeRepository;
+	let findPostTypeUseCase: FindPostTypeUseCase;
+	let sut: DeletePostTypeBySlugUseCase;
+
+	const validSchemaString = Schema.make(
+		t.Object({ content: t.String() }),
+	).toString();
 
 	beforeEach(() => {
 		repository = new PostTypeRepository();
-		useCase = new DeletePostTypeBySlugUseCase(repository);
+		findPostTypeUseCase = {
+			run: vi.fn(),
+		} as unknown as FindPostTypeUseCase;
+
+		sut = new DeletePostTypeBySlugUseCase(repository, findPostTypeUseCase);
 	});
 
-	it("should delete a post type by slug", async () => {
-		const slug = "post-type-to-delete";
-		const schemaStr = JSON.stringify(t.Object({ content: t.String() }));
-
-		const postType = PostType.make(
-			{ name: "Post Type To Delete", slug, isHighlighted: false },
-			PostTypeSchemaFactory.make(schemaStr),
-		);
+	it("should delete a post type", async () => {
+		const postType = PostType.make({ name: "Test", schema: validSchemaString });
 		await repository.create(postType);
+		vi.mocked(findPostTypeUseCase.run).mockResolvedValue(postType);
 
-		await useCase.run(slug);
+		await sut.run("test");
 
-		const deleted = await repository.findBySlug(slug);
-		expect(deleted).toBeNull();
+		expect(repository.items).toHaveLength(0);
 	});
 
 	it("should throw ResourceNotFoundException if post type not found", async () => {
-		const slug = "non-existent-slug";
-		await expect(useCase.run(slug)).rejects.toThrow(ResourceNotFoundException);
+		vi.mocked(findPostTypeUseCase.run).mockResolvedValue(null as any);
+
+		await expect(sut.run("non-existent")).rejects.toThrow(
+			ResourceNotFoundException,
+		);
 	});
 });

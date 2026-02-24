@@ -1,10 +1,9 @@
-import type { IPostTypeRepository } from "@/domain/types/post-type-repository.interface";
-import type { IUnmountedPostType } from "@/domain/types/unmounted-post-type.interface";
+import type { IPostTypeReader } from "@/domain/types";
 
 export class FindManyPostTypesUseCase {
-	public constructor(private readonly repository: IPostTypeRepository) {}
+	public constructor(private readonly reader: IPostTypeReader) {}
 
-	public run(page: number): Promise<IUnmountedPostType[]> {
-		return this.repository.findMany(page);
+	public run(page: number) {
+		return this.reader.findMany(page);
 	}
 }

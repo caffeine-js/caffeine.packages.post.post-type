@@ -10,12 +10,10 @@ export const UnpackedPostTypeDTO = t.Composite([
 				examples: ["Review"],
 				minLength: 1,
 			}),
-			isHighlighted: t.Optional(
-				t.Boolean({
-					description:
-						"Indicates whether the post type is highlighted in the user interface.",
-				}),
-			),
+			isHighlighted: t.Boolean({
+				description:
+					"Indicates whether the post type is highlighted in the user interface.",
+			}),
 			slug: t.String({
 				description:
 					"The unique slug identifier for the post type (e.g., 'my-adventures').",

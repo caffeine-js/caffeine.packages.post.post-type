@@ -1,34 +1,24 @@
-import type { IPostTypeRepository } from "@/domain/types/post-type-repository.interface";
 import type { CreatePostTypeDTO } from "../dtos/create-post-type.dto";
 import { PostType } from "@/domain/post-type";
-import { PostTypeUniquenessChecker } from "@/domain/services/post-type-uniqueness-checker.service";
-import { slugify } from "@caffeine/models/helpers";
 import { ResourceAlreadyExistsException } from "@caffeine/errors/application";
-import { PostTypeSchemaFactory } from "@/domain/factories/post-type-schema.factory";
-import type { IUnmountedPostType } from "@/domain/types/unmounted-post-type.interface";
+import { EntitySource } from "@caffeine/entity/symbols";
+import type { IPostTypeWriter } from "@/domain/types";
+import type { IPostTypeUniquenessCheckerService } from "@/domain/types/services";
 
 export class CreatePostTypeUseCase {
-	public constructor(private readonly repository: IPostTypeRepository) {}
+	public constructor(
+		private readonly writer: IPostTypeWriter,
+		private readonly uniquenessChecker: IPostTypeUniquenessCheckerService,
+	) {}
 
-	public async run({
-		name,
-		schema: _schema,
-	}: CreatePostTypeDTO): Promise<IUnmountedPostType> {
-		const uniquenessCheckerService = new PostTypeUniquenessChecker(
-			this.repository,
-		);
+	public async run({ name, schema }: CreatePostTypeDTO) {
+		const postType = PostType.make({ name, schema });
 
-		const slug = slugify(name);
+		if (!(await this.uniquenessChecker.run(postType.slug)))
+			throw new ResourceAlreadyExistsException(PostType[EntitySource]);
 
-		if (await uniquenessCheckerService.run(slug))
-			throw new ResourceAlreadyExistsException("post@post-type");
+		await this.writer.create(postType);
 
-		const schema = PostTypeSchemaFactory.make(_schema);
-
-		const newPostType = PostType.make({ name, slug }, schema);
-
-		await this.repository.create(newPostType);
-
-		return newPostType.unpack();
+		return postType;
 	}
 }

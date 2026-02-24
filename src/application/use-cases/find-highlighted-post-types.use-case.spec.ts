@@ -1,38 +1,40 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { FindHighlightedPostTypesUseCase } from "./find-highlighted-post-types.use-case";
 import { PostTypeRepository } from "@/infra/repositories/test/post-type-repository";
-import { PostType } from "@/domain/post-type";
-import { PostTypeSchemaFactory } from "@/domain/factories/post-type-schema.factory";
+import { PostType } from "@/domain";
+import { Schema } from "@caffeine/schema";
 import { t } from "@caffeine/models";
 
 describe("FindHighlightedPostTypesUseCase", () => {
-	let useCase: FindHighlightedPostTypesUseCase;
 	let repository: PostTypeRepository;
+	let sut: FindHighlightedPostTypesUseCase;
+
+	const validSchemaString = Schema.make(
+		t.Object({ content: t.String() }),
+	).toString();
 
 	beforeEach(() => {
 		repository = new PostTypeRepository();
-		useCase = new FindHighlightedPostTypesUseCase(repository);
+		sut = new FindHighlightedPostTypesUseCase(repository);
 	});
 
-	it("should return only highlighted post types", async () => {
-		const schemaStr = JSON.stringify(t.Object({ content: t.String() }));
-		const schema = PostTypeSchemaFactory.make(schemaStr);
+	it("should find highlighted post types", async () => {
+		const h1 = PostType.make({
+			name: "H1",
+			schema: validSchemaString,
+			isHighlighted: true,
+		});
+		const h2 = PostType.make({
+			name: "H2",
+			schema: validSchemaString,
+			isHighlighted: false,
+		});
+		await repository.create(h1);
+		await repository.create(h2);
 
-		const highlighted = PostType.make(
-			{ name: "Highlight", slug: "highlight", isHighlighted: true },
-			schema,
-		);
-		const notHighlighted = PostType.make(
-			{ name: "Not Highlight", slug: "not-highlight", isHighlighted: false },
-			schema,
-		);
-
-		await repository.create(highlighted);
-		await repository.create(notHighlighted);
-
-		const result = await useCase.run();
+		const result = await sut.run(1);
 
 		expect(result).toHaveLength(1);
-		expect(result[0]?.slug).toBe("highlight");
+		expect(result[0]).toBe(h1);
 	});
 });
