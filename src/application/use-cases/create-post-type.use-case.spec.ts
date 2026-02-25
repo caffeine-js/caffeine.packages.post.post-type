@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { CreatePostTypeUseCase } from "./create-post-type.use-case";
-import { PostTypeRepository } from "@/infra/repositories/test/post-type-repository";
+import { PostTypeRepository } from "@/infra/repositories/test/post-type.repository";
 import { ResourceAlreadyExistsException } from "@caffeine/errors/application";
 import { Schema } from "@caffeine/schema";
 import { t } from "@caffeine/models";

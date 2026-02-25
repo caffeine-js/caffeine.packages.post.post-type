@@ -52,24 +52,24 @@
         "husky": "^9.1.7"
     },
     "peerDependencies": {
-        "typescript": "^5"
+        "typescript": "^5",
+        "elysia": "^1.4.26"
     },
     "dependencies": {
         "@caffeine-packages/post.db.prisma-drive": "link:@caffeine-packages/post.db.prisma-drive",
+        "@caffeine/api-docs": "link:@caffeine/api-docs",
+        "@caffeine/api-error-handler": "link:@caffeine/api-error-handler",
+        "@caffeine/api-response-mapper": "link:@caffeine/api-response-mapper",
         "@caffeine/application": "link:@caffeine/application",
         "@caffeine/auth": "link:@caffeine/auth",
         "@caffeine/constants": "link:@caffeine/constants",
         "@caffeine/domain": "link:@caffeine/domain",
-        "@caffeine/presentation": "link:@caffeine/presentation",
         "@caffeine/entity": "link:@caffeine/entity",
         "@caffeine/errors": "link:@caffeine/errors",
         "@caffeine/models": "link:@caffeine/models",
+        "@caffeine/presentation": "link:@caffeine/presentation",
         "@caffeine/redis-drive": "link:@caffeine/redis-drive",
         "@caffeine/schema": "link:@caffeine/schema",
-        "@caffeine/value-objects": "link:@caffeine/value-objects",
-        "@caffeine/api-docs": "link:@caffeine/api-docs",
-        "@caffeine/api-error-handler": "link:@caffeine/api-error-handler",
-        "@caffeine/api-response-mapper": "link:@caffeine/api-response-mapper",
-        "elysia": "^1.4.22"
+        "@caffeine/value-objects": "link:@caffeine/value-objects"
     }
 }

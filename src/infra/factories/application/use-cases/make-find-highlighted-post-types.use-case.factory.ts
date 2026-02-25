@@ -1,7 +1,12 @@
+import { CountPostTypesUseCase } from "@/application/use-cases/count-post-types.use-case";
 import { FindHighlightedPostTypesUseCase } from "@/application/use-cases/find-highlighted-post-types.use-case";
-import { makePostTypeRepository } from "@/infra/factories/repositories/post-type.repository.factory";
+import type { IPostTypeReader } from "@/domain/types";
 
-export function makeFindHighlightedPostTypesUseCase(): FindHighlightedPostTypesUseCase {
-	const repository = makePostTypeRepository();
-	return new FindHighlightedPostTypesUseCase(repository);
+export function makeFindHighlightedPostTypesUseCase(
+	repository: IPostTypeReader,
+): FindHighlightedPostTypesUseCase {
+	return new FindHighlightedPostTypesUseCase(
+		repository,
+		new CountPostTypesUseCase(repository),
+	);
 }

@@ -1,12 +1,14 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { CountPostTypesUseCase } from "./count-post-types.use-case";
 import { FindHighlightedPostTypesUseCase } from "./find-highlighted-post-types.use-case";
-import { PostTypeRepository } from "@/infra/repositories/test/post-type-repository";
+import { PostTypeRepository } from "@/infra/repositories/test/post-type.repository";
 import { PostType } from "@/domain";
 import { Schema } from "@caffeine/schema";
 import { t } from "@caffeine/models";
 
 describe("FindHighlightedPostTypesUseCase", () => {
 	let repository: PostTypeRepository;
+	let countPostTypes: CountPostTypesUseCase;
 	let sut: FindHighlightedPostTypesUseCase;
 
 	const validSchemaString = Schema.make(
@@ -15,7 +17,8 @@ describe("FindHighlightedPostTypesUseCase", () => {
 
 	beforeEach(() => {
 		repository = new PostTypeRepository();
-		sut = new FindHighlightedPostTypesUseCase(repository);
+		countPostTypes = new CountPostTypesUseCase(repository);
+		sut = new FindHighlightedPostTypesUseCase(repository, countPostTypes);
 	});
 
 	it("should find highlighted post types", async () => {
@@ -34,7 +37,9 @@ describe("FindHighlightedPostTypesUseCase", () => {
 
 		const result = await sut.run(1);
 
-		expect(result).toHaveLength(1);
-		expect(result[0]).toBe(h1);
+		expect(result.value).toHaveLength(1);
+		expect(result.value[0]).toBe(h1);
+		expect(result.count).toBe(1);
+		expect(result.totalPages).toBe(1);
 	});
 });

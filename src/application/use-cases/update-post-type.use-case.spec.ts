@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { UpdatePostTypeUseCase } from "./update-post-type.use-case";
-import { PostTypeRepository } from "@/infra/repositories/test/post-type-repository";
+import { PostTypeRepository } from "@/infra/repositories/test/post-type.repository";
 import { FindPostTypeUseCase } from "./find-post-type.use-case";
 import { PostType } from "@/domain";
 import {

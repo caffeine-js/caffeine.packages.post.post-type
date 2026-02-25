@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { PostTypeRepository } from "./post-type-repository";
+import { PostTypeRepository } from "./post-type.repository";
 import { PostType } from "@/domain/post-type";
 import { MAX_ITEMS_PER_QUERY } from "@caffeine/constants";
 import { Schema } from "@caffeine/schema";

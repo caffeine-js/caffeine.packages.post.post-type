@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DeletePostTypeUseCase } from "./delete-post-type-by-slug.use-case";
-import { PostTypeRepository } from "@/infra/repositories/test/post-type-repository";
+import { PostTypeRepository } from "@/infra/repositories/test/post-type.repository";
 import { FindPostTypeUseCase } from "./find-post-type.use-case";
 import { PostType } from "@/domain";
 import { ResourceNotFoundException } from "@caffeine/errors/application";

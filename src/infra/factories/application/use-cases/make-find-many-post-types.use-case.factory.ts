@@ -1,7 +1,12 @@
+import { CountPostTypesUseCase } from "@/application/use-cases/count-post-types.use-case";
 import { FindManyPostTypesUseCase } from "@/application/use-cases/find-many-post-types.use-case";
-import { makePostTypeRepository } from "@/infra/factories/repositories/post-type.repository.factory";
+import type { IPostTypeReader } from "@/domain/types";
 
-export function makeFindManyPostTypesUseCase(): FindManyPostTypesUseCase {
-	const repository = makePostTypeRepository();
-	return new FindManyPostTypesUseCase(repository);
+export function makeFindManyPostTypesUseCase(
+	repository: IPostTypeReader,
+): FindManyPostTypesUseCase {
+	return new FindManyPostTypesUseCase(
+		repository,
+		new CountPostTypesUseCase(repository),
+	);
 }

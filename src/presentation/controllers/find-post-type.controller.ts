@@ -1,25 +1,28 @@
-import { PostType } from "@/domain";
 import { UnpackedPostTypeDTO } from "@/domain/dtos";
+import type { IPostTypeRepository } from "@/domain/types";
 import { makeFindPostTypeUseCase } from "@/infra/factories/application/use-cases";
-import { EntitySource } from "@caffeine/entity/symbols";
-import { IdOrSlugDTO } from "@caffeine/presentation";
+import { IdOrSlugDTO } from "@caffeine/presentation/dtos";
 import Elysia from "elysia";
+import { PostTypeRepositoryPlugin } from "../plugins";
 
-const FIND_POST_TYPE = `${PostType[EntitySource]}:find-post-type` as const;
-
-export const FindPostTypeController = new Elysia()
-	.decorate(FIND_POST_TYPE, makeFindPostTypeUseCase())
-	.get(
-		"/:id-or-slug",
-		({ params, [FIND_POST_TYPE]: service, status }) =>
-			status(200, service!.run(params["id-or-slug"]) as never),
-		{
-			params: IdOrSlugDTO,
-			detail: {
-				summary: "Find Post Type",
-				description:
-					"Retrieves the details of a specific post type identified by its unique ID or slug.",
+export function FindPostTypeController(repository: IPostTypeRepository) {
+	return new Elysia()
+		.use(PostTypeRepositoryPlugin(repository))
+		.derive({ as: "local" }, ({ postTypeRepository }) => ({
+			findPostType: makeFindPostTypeUseCase(postTypeRepository),
+		}))
+		.get(
+			"/:id-or-slug",
+			({ params, findPostType, status }) =>
+				status(200, findPostType.run(params["id-or-slug"]) as never),
+			{
+				params: IdOrSlugDTO,
+				detail: {
+					summary: "Find Post Type",
+					description:
+						"Retrieves the details of a specific post type identified by its unique ID or slug.",
+				},
+				response: { 200: UnpackedPostTypeDTO },
 			},
-			response: { 200: UnpackedPostTypeDTO },
-		},
-	);
+		);
+}
