@@ -8,17 +8,25 @@ import { IdOrSlugDTO } from "@caffeine/presentation/dtos";
 import { Elysia } from "elysia";
 import { PostTypeRepositoryPlugin } from "../plugins";
 
-export function DeletePostTypeController(repository: IPostTypeRepository) {
+export function DeletePostTypeController(
+	repository: IPostTypeRepository,
+	jwtSecret: string,
+) {
 	return new Elysia()
-		.use(CaffeineAuth({ layerName: PostType[EntitySource] }))
+		.use(
+			CaffeineAuth({
+				layerName: PostType[EntitySource],
+				jwtSecret,
+			}),
+		)
 		.use(PostTypeRepositoryPlugin(repository))
 		.derive({ as: "local" }, ({ postTypeRepository }) => ({
 			deletePostType: makeDeletePostTypeUseCase(postTypeRepository),
 		}))
 		.delete(
 			"/:id-or-slug",
-			({ params, deletePostType, status }) =>
-				status(200, deletePostType.run(params["id-or-slug"]) as never),
+			async ({ params, deletePostType, status }) =>
+				status(200, (await deletePostType.run(params["id-or-slug"])) as never),
 			{
 				params: IdOrSlugDTO,
 				detail: {

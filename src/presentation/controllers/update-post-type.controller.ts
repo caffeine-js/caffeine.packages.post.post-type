@@ -10,17 +10,32 @@ import { UnpackedPostTypeDTO } from "@/domain/dtos";
 import type { IPostTypeRepository } from "@/domain/types";
 import { PostTypeRepositoryPlugin } from "../plugins";
 
-export function UpdatePostTypeController(repository: IPostTypeRepository) {
+export function UpdatePostTypeController(
+	repository: IPostTypeRepository,
+	jwtSecret: string,
+) {
 	return new Elysia()
-		.use(CaffeineAuth({ layerName: PostType[EntitySource] }))
+		.use(
+			CaffeineAuth({
+				layerName: PostType[EntitySource],
+				jwtSecret,
+			}),
+		)
 		.use(PostTypeRepositoryPlugin(repository))
 		.derive({ as: "local" }, ({ postTypeRepository }) => ({
 			updatePostType: makeUpdatePostTypeUseCase(postTypeRepository),
 		}))
 		.patch(
 			"/:id-or-slug",
-			({ params, body, updatePostType, status }) =>
-				status(200, updatePostType.run(params["id-or-slug"], body) as never),
+			async ({ params, body, updatePostType, status, query }) =>
+				status(
+					200,
+					(await updatePostType.run(
+						params["id-or-slug"],
+						body,
+						query["update-slug"],
+					)) as never,
+				),
 			{
 				params: IdOrSlugDTO,
 				query: UpdatePostTypeQueryParamsDTO,

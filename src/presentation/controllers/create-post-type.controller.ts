@@ -8,9 +8,17 @@ import { Elysia } from "elysia";
 import { PostTypeRepositoryPlugin } from "../plugins";
 import type { IPostTypeRepository } from "@/domain/types";
 
-export function CreatePostTypeController(repository: IPostTypeRepository) {
+export function CreatePostTypeController(
+	repository: IPostTypeRepository,
+	jwtSecret: string,
+) {
 	return new Elysia()
-		.use(CaffeineAuth({ layerName: PostType[EntitySource] }))
+		.use(
+			CaffeineAuth({
+				layerName: PostType[EntitySource],
+				jwtSecret,
+			}),
+		)
 		.use(PostTypeRepositoryPlugin(repository))
 		.derive({ as: "local" }, ({ postTypeRepository }) => ({
 			createPostType: makeCreatePostTypeUseCase(postTypeRepository),

@@ -13,8 +13,8 @@ export function FindPostTypeController(repository: IPostTypeRepository) {
 		}))
 		.get(
 			"/:id-or-slug",
-			({ params, findPostType, status }) =>
-				status(200, findPostType.run(params["id-or-slug"]) as never),
+			async ({ params, findPostType, status }) =>
+				status(200, (await findPostType.run(params["id-or-slug"])) as never),
 			{
 				params: IdOrSlugDTO,
 				detail: {
