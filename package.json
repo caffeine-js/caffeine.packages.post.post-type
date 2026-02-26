@@ -49,14 +49,15 @@
         "vitest": "^4.0.18",
         "@commitlint/cli": "^20.4.1",
         "@commitlint/config-conventional": "^20.4.1",
-        "husky": "^9.1.7"
+        "husky": "^9.1.7",
+        "elysia": "^1.4.26"
     },
     "peerDependencies": {
         "typescript": "^5",
         "elysia": "^1.4.26"
     },
     "dependencies": {
-        "@caffeine-packages/post.db.prisma-drive": "link:@caffeine-packages/post.db.prisma-drive",
+        "@caffeine-adapters/post": "link:@caffeine-adapters/post",
         "@caffeine/api-docs": "link:@caffeine/api-docs",
         "@caffeine/api-error-handler": "link:@caffeine/api-error-handler",
         "@caffeine/api-response-mapper": "link:@caffeine/api-response-mapper",

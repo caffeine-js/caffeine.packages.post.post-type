@@ -5,7 +5,7 @@
     "": {
       "name": "@caffeine-packages/post.post-type",
       "dependencies": {
-        "@caffeine-packages/post.db.prisma-drive": "link:@caffeine-packages/post.db.prisma-drive",
+        "@caffeine-adapters/post": "link:@caffeine-adapters/post",
         "@caffeine/api-docs": "link:@caffeine/api-docs",
         "@caffeine/api-error-handler": "link:@caffeine/api-error-handler",
         "@caffeine/api-response-mapper": "link:@caffeine/api-response-mapper",
@@ -28,6 +28,7 @@
         "@faker-js/faker": "^10.2.0",
         "@types/bun": "latest",
         "@vitest/coverage-v8": "^4.0.18",
+        "elysia": "^1.4.26",
         "husky": "^9.1.7",
         "tsup": "^8.5.1",
         "vite-tsconfig-paths": "^6.0.5",
@@ -54,7 +55,7 @@
 
     "@borewit/text-codec": ["@borewit/text-codec@0.2.1", "", {}, "sha512-k7vvKPbf7J2fZ5klGRD9AeKfUvojuZIQ3BT5u7Jfv+puwXkUBUT5PVyMDfJZpy30CBDXGMgw7fguK/lpOMBvgw=="],
 
-    "@caffeine-packages/post.db.prisma-drive": ["@caffeine-packages/post.db.prisma-drive@link:@caffeine-packages/post.db.prisma-drive", {}],
+    "@caffeine-adapters/post": ["@caffeine-adapters/post@link:@caffeine-adapters/post", {}],
 
     "@caffeine/api-docs": ["@caffeine/api-docs@link:@caffeine/api-docs", {}],
 
@@ -248,7 +249,7 @@
 
     "@types/estree": ["@types/estree@1.0.8", "", {}, "sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w=="],
 
-    "@types/node": ["@types/node@25.3.0", "", { "dependencies": { "undici-types": "~7.18.0" } }, "sha512-4K3bqJpXpqfg2XKGK9bpDTc6xO/xoUP/RBWS7AtRMug6zZFaRekiLzjVtAoZMquxoAbzBvy5nxQ7veS5eYzf8A=="],
+    "@types/node": ["@types/node@25.3.1", "", { "dependencies": { "undici-types": "~7.18.0" } }, "sha512-hj9YIJimBCipHVfHKRMnvmHg+wfhKc0o4mTtXh9pKBjC8TLJzz0nzGmLi5UJsYAUgSvXFHgb0V2oY10DUFtImw=="],
 
     "@vitest/coverage-v8": ["@vitest/coverage-v8@4.0.18", "", { "dependencies": { "@bcoe/v8-coverage": "^1.0.2", "@vitest/utils": "4.0.18", "ast-v8-to-istanbul": "^0.3.10", "istanbul-lib-coverage": "^3.2.2", "istanbul-lib-report": "^3.0.1", "istanbul-reports": "^3.2.0", "magicast": "^0.5.1", "obug": "^2.1.1", "std-env": "^3.10.0", "tinyrainbow": "^3.0.3" }, "peerDependencies": { "@vitest/browser": "4.0.18", "vitest": "4.0.18" }, "optionalPeers": ["@vitest/browser"] }, "sha512-7i+N2i0+ME+2JFZhfuz7Tg/FqKtilHjGyGvoHYQ6iLV0zahbsJ9sljC9OcFcPDbhYKCet+sG8SsVqlyGvPflZg=="],
 
