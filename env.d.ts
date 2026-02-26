@@ -4,5 +4,8 @@ declare namespace NodeJS {
 		POSTGRESQL_PASSWORD: string;
 		POSTGRESQL_DATABASE: string;
 		DATABASE_URL: string;
+		JWT_SECRET: string;
+		AUTH_EMAIL: string;
+		AUTH_PASSWORD: string;
 	}
 }

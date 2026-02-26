@@ -12,15 +12,18 @@ import {
 	UpdatePostTypeController,
 } from "../controllers";
 
-export function PostTypeRoutes(repository: IPostTypeRepository) {
+export function PostTypeRoutes(
+	repository: IPostTypeRepository,
+	jwtSecret: string,
+) {
 	return new Elysia({
-		prefix: "/post-type",
-		detail: { tags: ["Post Type"] },
+		prefix: "/post-types",
+		detail: { tags: ["Post Types"] },
 		name: PostType[EntitySource],
 	})
-		.use(CreatePostTypeController(repository))
-		.use(DeletePostTypeController(repository))
-		.use(UpdatePostTypeController(repository))
+		.use(CreatePostTypeController(repository, jwtSecret))
+		.use(DeletePostTypeController(repository, jwtSecret))
+		.use(UpdatePostTypeController(repository, jwtSecret))
 		.use(FindPostTypeController(repository))
 		.use(FindManyPostTypesController(repository))
 		.use(FindHighlightedPostTypesController(repository));

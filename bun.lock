@@ -14,6 +14,7 @@
         "@caffeine/constants": "link:@caffeine/constants",
         "@caffeine/domain": "link:@caffeine/domain",
         "@caffeine/entity": "link:@caffeine/entity",
+        "@caffeine/env": "link:@caffeine/env",
         "@caffeine/errors": "link:@caffeine/errors",
         "@caffeine/models": "link:@caffeine/models",
         "@caffeine/presentation": "link:@caffeine/presentation",
@@ -70,6 +71,8 @@
     "@caffeine/domain": ["@caffeine/domain@link:@caffeine/domain", {}],
 
     "@caffeine/entity": ["@caffeine/entity@link:@caffeine/entity", {}],
+
+    "@caffeine/env": ["@caffeine/env@link:@caffeine/env", {}],
 
     "@caffeine/errors": ["@caffeine/errors@link:@caffeine/errors", {}],
 

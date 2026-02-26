@@ -70,6 +70,7 @@
         "@caffeine/presentation": "link:@caffeine/presentation",
         "@caffeine/redis-drive": "link:@caffeine/redis-drive",
         "@caffeine/schema": "link:@caffeine/schema",
+        "@caffeine/env": "link:@caffeine/env",
         "@caffeine/value-objects": "link:@caffeine/value-objects"
     }
 }

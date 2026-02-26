@@ -1,6 +1,5 @@
 import { t } from "@caffeine/models";
 import { EntityDTO } from "@caffeine/entity/dtos";
-import { SchemaDTO } from "./schema.dto";
 
 export const UnpackedPostTypeDTO = t.Composite([
 	t.Object(
@@ -19,7 +18,10 @@ export const UnpackedPostTypeDTO = t.Composite([
 					"The unique slug identifier for the post type (e.g., 'my-adventures').",
 				examples: ["my-adventures"],
 			}),
-			schema: SchemaDTO,
+			schema: t.String({
+				description:
+					"The serialized TypeBox schema defining the structure of this post type. Must be generated via `SchemaManager`.",
+			}),
 		},
 		{
 			description: "Data transfer object representing the raw post type data.",
