@@ -36,7 +36,7 @@
         "test:unit": "bun test --env-file=.env.testing",
         "test:coverage": "bun test --env-file=.env.testing --coverage",
         "setup": "bun run build && bun link",
-        "start:dev": "bun --watch src/presentation/dev/index.ts",
+        "start:dev": "bun --watch src/presentation/dev/index.mts",
         "prepare": "husky"
     },
     "devDependencies": {
