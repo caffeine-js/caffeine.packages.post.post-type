@@ -31,3 +31,5 @@ export function PostTypeRoutes(data: PostTypeRoutesArgs) {
         .use(FindManyPostTypesController(controllersWithoutAuth))
         .use(FindHighlightedPostTypesController(controllersWithoutAuth));
 }
+
+export type PostTypeRoutes = ReturnType<typeof PostTypeRoutes>;
