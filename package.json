@@ -1,5 +1,5 @@
 {
-    "name": "@caffeine-packages/post.post-type",
+    "name": "@roastery-capsules/post.post-type",
     "author": {
         "name": "Alan Reis",
         "email": "alanreisanjo@gmail.com",
@@ -32,12 +32,12 @@
     ],
     "type": "module",
     "scripts": {
-        "build": "tsup 'src/**/index.ts' --format cjs,esm --dts --tsconfig tsconfig.build.json --clean",
+        "build": "knip && biome check --fix && tsup 'src/**/index.ts' --format cjs,esm --dts --tsconfig tsconfig.build.json --clean",
         "test:unit": "bun test --env-file=.env.testing",
         "test:coverage": "bun test --env-file=.env.testing --coverage",
         "setup": "bun run build && bun link",
-        "start:dev": "bun --watch src/presentation/dev/index.mts",
-        "prepare": "husky"
+        "prepare": "husky || true",
+        "knip": "knip"
     },
     "devDependencies": {
         "@commitlint/cli": "^20.4.1",
@@ -46,30 +46,18 @@
         "@faker-js/faker": "^10.2.0",
         "@types/bun": "latest",
         "dotenv": "^17.3.1",
-        "elysia": "^1.4.26",
         "husky": "^9.1.7",
-        "tsup": "^8.5.1"
+        "knip": "^6.0.3"
     },
     "peerDependencies": {
         "typescript": "^5",
-        "elysia": "^1.4.26"
+        "elysia": "^1.4.26",
+        "tsup": "^8.5.1"
     },
     "dependencies": {
-        "@caffeine-adapters/post": "link:@caffeine-adapters/post",
-        "@caffeine/api-docs": "link:@caffeine/api-docs",
-        "@caffeine/api-error-handler": "link:@caffeine/api-error-handler",
-        "@caffeine/api-response-mapper": "link:@caffeine/api-response-mapper",
-        "@caffeine/application": "link:@caffeine/application",
-        "@caffeine/auth": "link:@caffeine/auth",
-        "@caffeine/constants": "link:@caffeine/constants",
-        "@caffeine/domain": "link:@caffeine/domain",
-        "@caffeine/entity": "link:@caffeine/entity",
-        "@caffeine/errors": "link:@caffeine/errors",
-        "@caffeine/models": "link:@caffeine/models",
-        "@caffeine/presentation": "link:@caffeine/presentation",
-        "@caffeine/cache": "link:@caffeine/cache",
-        "@caffeine/schema": "link:@caffeine/schema",
-        "@caffeine/env": "link:@caffeine/env",
-        "@caffeine/value-objects": "link:@caffeine/value-objects"
+        "@roastery/barista": "^0.0.5",
+        "@roastery/beans": "^0.0.2",
+        "@roastery/seedbed": "^0.0.2",
+        "@roastery/terroir": "^0.0.9"
     }
 }

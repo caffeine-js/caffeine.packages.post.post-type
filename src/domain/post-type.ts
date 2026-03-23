@@ -1,24 +1,19 @@
 import type { IPostType } from "./types/post-type.interface";
-import type { Schema } from "@caffeine/schema";
-import { Entity } from "@caffeine/entity";
-import {
-    EntityContext,
-    EntitySchema,
-    EntitySource,
-} from "@caffeine/entity/symbols";
 import { UnpackedPostTypeSchema } from "./schemas";
-import { AutoUpdate } from "@caffeine/entity/decorators";
 import type { SchemaDTO } from "./dtos";
 import type { IMakePostType } from "./types";
-import { BooleanVO, DefinedStringVO, SlugVO } from "@caffeine/value-objects";
 import { SchemaVO } from "./value-objects";
-import type { EntityDTO } from "@caffeine/entity/dtos";
-import { makeEntity } from "@caffeine/entity/factories";
+import { Entity } from "@roastery/beans";
+import { EntityContext, EntitySchema, EntitySource } from "@roastery/beans/entity/symbols";
+import type { Schema } from "@roastery/terroir/schema";
+import { BooleanVO, DefinedStringVO, SlugVO } from "@roastery/beans/collections/value-objects";
+import type { EntityDTO } from "@roastery/beans/entity/dtos";
+import { makeEntity } from "@roastery/beans/entity/factories";
+import { AutoUpdate } from "@roastery/beans/entity/decorators";
 
 export class PostType
     extends Entity<UnpackedPostTypeSchema>
-    implements IPostType
-{
+    implements IPostType {
     public override readonly [EntitySource]: string = "post@post-type";
     public static readonly [EntitySource]: string = "post@post-type";
     public override readonly [EntitySchema]: Schema<UnpackedPostTypeSchema> =
@@ -41,9 +36,9 @@ export class PostType
         this._isHighlighted =
             isHighlighted !== undefined
                 ? BooleanVO.make(
-                      isHighlighted,
-                      this[EntityContext]("isHighlighted"),
-                  )
+                    isHighlighted,
+                    this[EntityContext]("isHighlighted"),
+                )
                 : BooleanVO.falsy(this[EntityContext]("isHighlighted"));
     }
 
