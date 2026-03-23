@@ -1,4 +1,5 @@
-import { t } from "@caffeine/models";
+
+import { t } from "@roastery/terroir";
 import { RepositoryProviderDTO } from "../factories/repositories/dtos";
 
 export const PostTypeDependenciesDTO = t.Object({

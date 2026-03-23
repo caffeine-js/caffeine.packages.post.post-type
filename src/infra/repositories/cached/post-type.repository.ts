@@ -1,20 +1,20 @@
 import type { IPostType } from "@/domain/types/post-type.interface";
 import type { IPostTypeRepository } from "@/domain/types/post-type-repository.interface";
-import type { CaffeineCacheInstance } from "@caffeine/cache";
 import { CachedPostTypeMapper } from "./cached-post-type-mapper";
-import { CACHE_EXPIRATION_TIME } from "@caffeine/constants";
-import { Mapper } from "@caffeine/entity";
 import { PostType } from "@/domain";
-import { EntitySource } from "@caffeine/entity/symbols";
-import { SafeCache } from "@caffeine/cache/decorators";
+import { CACHE_EXPIRATION_TIME } from "@roastery/seedbed/constants";
+import type { BaristaCacheInstance } from "@roastery-adapters/cache";
+import { SafeCache } from "@roastery-adapters/cache/decorators";
+import { EntitySource } from "@roastery/beans/entity/symbols";
+import { Mapper } from "@roastery/beans";
 
 export class PostTypeRepository implements IPostTypeRepository {
     private readonly cacheExpirationTime: number = CACHE_EXPIRATION_TIME.SAFE;
 
     constructor(
         private readonly repository: IPostTypeRepository,
-        private readonly cache: CaffeineCacheInstance,
-    ) {}
+        private readonly cache: BaristaCacheInstance,
+    ) { }
 
     async create(postType: IPostType): Promise<void> {
         await this.repository.create(postType);

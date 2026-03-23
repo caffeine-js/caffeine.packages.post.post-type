@@ -1,4 +1,5 @@
-import { t } from "@caffeine/models";
+import { t } from "@roastery/terroir";
+
 
 export const RepositoryProviderDTO = t.Union([
     t.Literal("PRISMA"),

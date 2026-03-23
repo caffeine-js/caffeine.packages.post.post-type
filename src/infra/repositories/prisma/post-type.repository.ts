@@ -1,15 +1,15 @@
 import { PostType } from "@/domain/post-type";
 import type { IPostType } from "@/domain/types";
 import type { IPostTypeRepository } from "@/domain/types/post-type-repository.interface";
-import { MAX_ITEMS_PER_QUERY } from "@caffeine/constants";
-import { Mapper } from "@caffeine/entity";
-import { EntitySource } from "@caffeine/entity/symbols";
 import { PrismaPostTypeMapper } from "./prisma-post-type-mapper";
-import { SafePrisma } from "@caffeine-adapters/post/decorators";
-import type { PrismaClient } from "@caffeine-adapters/post";
+import type { PrismaClient } from "@roastery-adapters/post";
+import { SafePrisma } from "@roastery-adapters/post/decorators";
+import { EntitySource } from "@roastery/beans/entity/symbols";
+import { Mapper } from "@roastery/beans";
+import { MAX_ITEMS_PER_QUERY } from "@roastery/seedbed/constants";
 
 export class PostTypeRepository implements IPostTypeRepository {
-    public constructor(private readonly prisma: PrismaClient) {}
+    public constructor(private readonly prisma: PrismaClient) { }
 
     @SafePrisma(PostType[EntitySource])
     async create(data: IPostType): Promise<void> {

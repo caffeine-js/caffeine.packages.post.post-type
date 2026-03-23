@@ -3,15 +3,15 @@ import { PostTypeRepository as PrismaPostTypeRepository } from "@/infra/reposito
 import { PostTypeRepository as CachedPostTypeRepository } from "@/infra/repositories/cached";
 import type { RepositoryProviderDTO } from "./dtos";
 import { PostTypeRepository as TestPostTypeRepository } from "@/infra/repositories/test";
-import type { PrismaClient } from "@caffeine-adapters/post";
-import { ResourceNotFoundException } from "@caffeine/errors/infra";
+import { ResourceNotFoundException } from "@roastery/terroir/exceptions/infra";
+import { EntitySource } from "@roastery/beans/entity/symbols";
 import { PostType } from "@/domain";
-import { EntitySource } from "@caffeine/entity/symbols";
-import type { CaffeineCacheInstance } from "@caffeine/cache";
+import type { BaristaCacheInstance } from "@roastery-adapters/cache";
+import type { PrismaClient } from "@roastery-adapters/post";
 
 type MakePostTypeRepositoryArgs = {
     target?: RepositoryProviderDTO;
-    cache: CaffeineCacheInstance;
+    cache: BaristaCacheInstance;
     prismaClient?: PrismaClient;
 };
 

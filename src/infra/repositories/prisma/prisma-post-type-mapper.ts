@@ -1,7 +1,7 @@
 import { PostType } from "@/domain";
 import type { IPostType, IUnpackedPostType } from "@/domain/types";
-import { parsePrismaDateTimeToISOString } from "@caffeine-adapters/post/helpers";
-import { Mapper } from "@caffeine/entity";
+import { parsePrismaDateTimeToISOString } from "@roastery-adapters/post/helpers";
+import { Mapper } from "@roastery/beans";
 
 type PostTypePrismaDefaultOutput = Omit<
     IUnpackedPostType,
