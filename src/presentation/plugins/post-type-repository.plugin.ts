@@ -1,8 +1,8 @@
-import Elysia from "elysia";
 import type { IPostTypeRepository } from "@/domain/types";
+import { barista } from "@roastery/barista";
 
 export function PostTypeRepositoryPlugin(repository: IPostTypeRepository) {
-	return new Elysia({
+	return barista({
 		name: "postTypeRepository",
 	}).decorate("postTypeRepository", repository);
 }

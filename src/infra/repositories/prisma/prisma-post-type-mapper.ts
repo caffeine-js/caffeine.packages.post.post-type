@@ -4,18 +4,18 @@ import { parsePrismaDateTimeToISOString } from "@roastery-adapters/post/helpers"
 import { Mapper } from "@roastery/beans";
 
 type PostTypePrismaDefaultOutput = Omit<
-    IUnpackedPostType,
-    "createdAt" | "updatedAt"
+	IUnpackedPostType,
+	"createdAt" | "updatedAt"
 > & {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date | null;
+	id: string;
+	createdAt: Date;
+	updatedAt: Date | null;
 };
 
 export const PrismaPostTypeMapper = {
-    run: (content: PostTypePrismaDefaultOutput): IPostType => {
-        const data: IUnpackedPostType = parsePrismaDateTimeToISOString(content);
+	run: (content: PostTypePrismaDefaultOutput): IPostType => {
+		const data: IUnpackedPostType = parsePrismaDateTimeToISOString(content);
 
-        return Mapper.toDomain(data, PostType.make) as IPostType;
-    },
+		return Mapper.toDomain(data, PostType.make) as IPostType;
+	},
 } as const;

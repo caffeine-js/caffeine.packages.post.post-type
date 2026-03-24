@@ -3,7 +3,7 @@ import type { IPostTypeReader } from "@/domain/types";
 import { SlugUniquenessCheckerService } from "@roastery/seedbed/domain/services";
 
 export function makeSlugUniquenessCheckerService(
-    repository: IPostTypeReader,
+	repository: IPostTypeReader,
 ): IPostTypeUniquenessCheckerService {
-    return new SlugUniquenessCheckerService(repository);
+	return new SlugUniquenessCheckerService(repository);
 }

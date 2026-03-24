@@ -4,12 +4,12 @@ import { FindPostTypeUseCase } from "@/application/use-cases/find-post-type.use-
 import { FindEntityByTypeUseCase } from "@roastery/seedbed/application/use-cases";
 
 export function makeFindPostTypeUseCase(
-    repository: IPostTypeReader,
+	repository: IPostTypeReader,
 ): FindPostTypeUseCase {
-    const findEntityByType = new FindEntityByTypeUseCase<
-        typeof UnpackedPostTypeDTO,
-        IPostType,
-        IPostTypeReader
-    >(repository);
-    return new FindPostTypeUseCase(findEntityByType);
+	const findEntityByType = new FindEntityByTypeUseCase<
+		typeof UnpackedPostTypeDTO,
+		IPostType,
+		IPostTypeReader
+	>(repository);
+	return new FindPostTypeUseCase(findEntityByType);
 }

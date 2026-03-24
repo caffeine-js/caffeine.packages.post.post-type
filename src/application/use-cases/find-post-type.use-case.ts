@@ -5,15 +5,15 @@ import type { FindEntityByTypeUseCase } from "@roastery/seedbed/application/use-
 import { EntitySource } from "@roastery/beans/entity/symbols";
 
 export class FindPostTypeUseCase {
-    public constructor(
-        private readonly findPostTypeByType: FindEntityByTypeUseCase<
-            typeof UnpackedPostTypeDTO,
-            IPostType,
-            IPostTypeReader
-        >,
-    ) { }
+	public constructor(
+		private readonly findPostTypeByType: FindEntityByTypeUseCase<
+			typeof UnpackedPostTypeDTO,
+			IPostType,
+			IPostTypeReader
+		>,
+	) {}
 
-    public run(value: string) {
-        return this.findPostTypeByType.run(value, PostType[EntitySource]);
-    }
+	public run(value: string) {
+		return this.findPostTypeByType.run(value, PostType[EntitySource]);
+	}
 }

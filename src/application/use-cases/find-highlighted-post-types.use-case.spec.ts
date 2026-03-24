@@ -7,55 +7,55 @@ import { Schema } from "@roastery/terroir/schema";
 import { t } from "@roastery/terroir";
 
 describe("FindHighlightedPostTypesUseCase", () => {
-    let repository: PostTypeRepository;
-    let countPostTypes: CountPostTypesUseCase;
-    let sut: FindHighlightedPostTypesUseCase;
+	let repository: PostTypeRepository;
+	let countPostTypes: CountPostTypesUseCase;
+	let sut: FindHighlightedPostTypesUseCase;
 
-    const validSchemaString = Schema.make(
-        t.Object({ content: t.String() }),
-    ).toString();
+	const validSchemaString = Schema.make(
+		t.Object({ content: t.String() }),
+	).toString();
 
-    beforeEach(() => {
-        repository = new PostTypeRepository();
-        countPostTypes = new CountPostTypesUseCase(repository);
-        sut = new FindHighlightedPostTypesUseCase(repository, countPostTypes);
-    });
+	beforeEach(() => {
+		repository = new PostTypeRepository();
+		countPostTypes = new CountPostTypesUseCase(repository);
+		sut = new FindHighlightedPostTypesUseCase(repository, countPostTypes);
+	});
 
-    it("should find highlighted post types", async () => {
-        const h1 = PostType.make({
-            name: "H1",
-            schema: validSchemaString,
-            isHighlighted: true,
-        });
-        const h2 = PostType.make({
-            name: "H2",
-            schema: validSchemaString,
-            isHighlighted: false,
-        });
-        await repository.create(h1);
-        await repository.create(h2);
+	it("should find highlighted post types", async () => {
+		const h1 = PostType.make({
+			name: "H1",
+			schema: validSchemaString,
+			isHighlighted: true,
+		});
+		const h2 = PostType.make({
+			name: "H2",
+			schema: validSchemaString,
+			isHighlighted: false,
+		});
+		await repository.create(h1);
+		await repository.create(h2);
 
-        const result = await sut.run(1);
+		const result = await sut.run(1);
 
-        expect(result.value).toHaveLength(1);
-        expect(result.value[0]).toBe(h1);
-        expect(result.count).toBe(1);
-        expect(result.totalPages).toBe(1);
-    });
+		expect(result.value).toHaveLength(1);
+		expect(result.value[0]).toBe(h1);
+		expect(result.count).toBe(1);
+		expect(result.totalPages).toBe(1);
+	});
 
-    it("should return empty results when no highlighted post types exist", async () => {
-        await repository.create(
-            PostType.make({
-                name: "Not Highlighted",
-                schema: validSchemaString,
-                isHighlighted: false,
-            }),
-        );
+	it("should return empty results when no highlighted post types exist", async () => {
+		await repository.create(
+			PostType.make({
+				name: "Not Highlighted",
+				schema: validSchemaString,
+				isHighlighted: false,
+			}),
+		);
 
-        const result = await sut.run(1);
+		const result = await sut.run(1);
 
-        expect(result.value).toHaveLength(0);
-        expect(result.count).toBe(0);
-        expect(result.totalPages).toBe(0);
-    });
+		expect(result.value).toHaveLength(0);
+		expect(result.count).toBe(0);
+		expect(result.totalPages).toBe(0);
+	});
 });

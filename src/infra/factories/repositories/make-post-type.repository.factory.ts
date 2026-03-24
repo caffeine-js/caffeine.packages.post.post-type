@@ -10,23 +10,23 @@ import type { BaristaCacheInstance } from "@roastery-adapters/cache";
 import type { PrismaClient } from "@roastery-adapters/post";
 
 type MakePostTypeRepositoryArgs = {
-    target?: RepositoryProviderDTO;
-    cache: BaristaCacheInstance;
-    prismaClient?: PrismaClient;
+	target?: RepositoryProviderDTO;
+	cache: BaristaCacheInstance;
+	prismaClient?: PrismaClient;
 };
 
 export function makePostTypeRepository({
-    cache,
-    prismaClient,
-    target,
+	cache,
+	prismaClient,
+	target,
 }: MakePostTypeRepositoryArgs): IPostTypeRepository {
-    if (target?.includes("PRISMA") && !prismaClient)
-        throw new ResourceNotFoundException(PostType[EntitySource]);
+	if (target?.includes("PRISMA") && !prismaClient)
+		throw new ResourceNotFoundException(PostType[EntitySource]);
 
-    const repository: IPostTypeRepository =
-        target === "PRISMA" && prismaClient
-            ? new PrismaPostTypeRepository(prismaClient)
-            : new TestPostTypeRepository();
+	const repository: IPostTypeRepository =
+		target === "PRISMA" && prismaClient
+			? new PrismaPostTypeRepository(prismaClient)
+			: new TestPostTypeRepository();
 
-    return new CachedPostTypeRepository(repository, cache);
+	return new CachedPostTypeRepository(repository, cache);
 }

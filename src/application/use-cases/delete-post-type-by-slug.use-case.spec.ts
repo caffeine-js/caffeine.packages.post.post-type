@@ -11,39 +11,39 @@ import { t } from "@roastery/terroir";
 import { ResourceNotFoundException } from "@roastery/terroir/exceptions/application";
 
 describe("DeletePostTypeUseCase", () => {
-    let repository: PostTypeRepository;
-    let findPostType: FindEntityByTypeUseCase<
-        UnpackedPostTypeSchema,
-        IPostType,
-        IPostTypeReader
-    >;
-    let findPostTypeUseCase: FindPostTypeUseCase;
-    let sut: DeletePostTypeUseCase;
+	let repository: PostTypeRepository;
+	let findPostType: FindEntityByTypeUseCase<
+		UnpackedPostTypeSchema,
+		IPostType,
+		IPostTypeReader
+	>;
+	let findPostTypeUseCase: FindPostTypeUseCase;
+	let sut: DeletePostTypeUseCase;
 
-    const validSchemaString = Schema.make(
-        t.Object({ content: t.String() }),
-    ).toString();
+	const validSchemaString = Schema.make(
+		t.Object({ content: t.String() }),
+	).toString();
 
-    beforeEach(() => {
-        repository = new PostTypeRepository();
-        findPostType = new FindEntityByTypeUseCase(repository);
-        findPostTypeUseCase = new FindPostTypeUseCase(findPostType);
+	beforeEach(() => {
+		repository = new PostTypeRepository();
+		findPostType = new FindEntityByTypeUseCase(repository);
+		findPostTypeUseCase = new FindPostTypeUseCase(findPostType);
 
-        sut = new DeletePostTypeUseCase(repository, findPostTypeUseCase);
-    });
+		sut = new DeletePostTypeUseCase(repository, findPostTypeUseCase);
+	});
 
-    it("should delete a post type", async () => {
-        const postType = PostType.make({ name: "Test", schema: validSchemaString });
-        await repository.create(postType);
+	it("should delete a post type", async () => {
+		const postType = PostType.make({ name: "Test", schema: validSchemaString });
+		await repository.create(postType);
 
-        await sut.run(postType.slug);
+		await sut.run(postType.slug);
 
-        expect(repository.items).toHaveLength(0);
-    });
+		expect(repository.items).toHaveLength(0);
+	});
 
-    it("should throw ResourceNotFoundException if post type not found", async () => {
-        await expect(sut.run("non-existent")).rejects.toThrow(
-            ResourceNotFoundException,
-        );
-    });
+	it("should throw ResourceNotFoundException if post type not found", async () => {
+		await expect(sut.run("non-existent")).rejects.toThrow(
+			ResourceNotFoundException,
+		);
+	});
 });

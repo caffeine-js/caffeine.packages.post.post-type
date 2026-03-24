@@ -6,19 +6,19 @@ import { EntitySource } from "@roastery/beans/entity/symbols";
 import { ResourceAlreadyExistsException } from "@roastery/terroir/exceptions/application";
 
 export class CreatePostTypeUseCase {
-    public constructor(
-        private readonly writer: IPostTypeWriter,
-        private readonly uniquenessChecker: IPostTypeUniquenessCheckerService,
-    ) { }
+	public constructor(
+		private readonly writer: IPostTypeWriter,
+		private readonly uniquenessChecker: IPostTypeUniquenessCheckerService,
+	) {}
 
-    public async run({ name, schema }: CreatePostTypeDTO) {
-        const postType = PostType.make({ name, schema });
+	public async run({ name, schema }: CreatePostTypeDTO) {
+		const postType = PostType.make({ name, schema });
 
-        if (!(await this.uniquenessChecker.run(postType.slug)))
-            throw new ResourceAlreadyExistsException(PostType[EntitySource]);
+		if (!(await this.uniquenessChecker.run(postType.slug)))
+			throw new ResourceAlreadyExistsException(PostType[EntitySource]);
 
-        await this.writer.create(postType);
+		await this.writer.create(postType);
 
-        return postType;
-    }
+		return postType;
+	}
 }
