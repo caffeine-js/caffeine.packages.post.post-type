@@ -1,7 +1,7 @@
 {
 	"name": "@roastery-capsules/post.post-type",
 	"description": "Post type management capsule for the Roastery CMS ecosystem — CRUD operations with schema definition, slug generation, highlighting, pagination, and optional caching.",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"author": {
 		"name": "Alan Reis",
 		"email": "alanreisanjo@gmail.com",
@@ -75,7 +75,7 @@
 		"tsup": "^8.5.1"
 	},
 	"dependencies": {
-		"@roastery-adapters/cache": "^0.0.4",
+		"@roastery-adapters/cache": "^0.0.5",
 		"@roastery-adapters/post": "^0.0.1",
 		"@roastery-capsules/api-docs": "^0.0.3",
 		"@roastery-capsules/api-error-handler": "^0.0.4",
@@ -83,7 +83,7 @@
 		"@roastery-capsules/auth": "^0.0.1",
 		"@roastery-capsules/env": "^0.0.4",
 		"@roastery/barista": "^0.0.5",
-		"@roastery/beans": "0.0.3",
+		"@roastery/beans": "0.0.4",
 		"@roastery/seedbed": "^0.0.2",
 		"@roastery/terroir": "^0.0.9"
 	}
